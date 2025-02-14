@@ -18,7 +18,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
 
     req.user = decoded as JwtPayload; 
 next();
-return();
+return;
   }catch (err) {
     return res.status(403).json({message: 'Invalid token'});
   }
