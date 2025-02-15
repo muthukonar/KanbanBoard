@@ -1,3 +1,4 @@
+
 import { useState, FormEvent, ChangeEvent } from "react";
 
 import Auth from '../utils/auth';
@@ -8,6 +9,7 @@ const Login = () => {
     username: '',
     password: ''
   });
+  console.log(loginData);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -22,6 +24,7 @@ const Login = () => {
     try {
       const data = await login(loginData);
       Auth.login(data.token);
+      console.log(data.token);
     } catch (err) {
       console.error('Failed to login', err);
     }
@@ -53,3 +56,5 @@ const Login = () => {
 };
 
 export default Login;
+
+
