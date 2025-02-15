@@ -1,11 +1,15 @@
-
 import { type JwtPayload, jwtDecode } from 'jwt-decode';
 import type { UserData } from '../interfaces/UserData';
 
 class AuthService {
+  private inactivityTimeout: number = 60 * 1000; 
+  private inactivityTimer: number | null = null;
+
+  constructor() {
+    this.setupInactivityListener();
+  }
+
   getProfile() {
-    // Decode the JSON Web Token (JWT) using the jwtDecode function, specifying the expected payload type as UserData.
-    // The getToken() method is called to retrieve the JWT, which is then passed to jwtDecode to extract and return its payload.
     return jwtDecode<UserData>(this.getToken());
   }
 
@@ -16,16 +20,11 @@ class AuthService {
 
   isTokenExpired(token: string) {
     try {
-      // Attempt to decode the provided token using jwtDecode, expecting a JwtPayload type.
       const decoded = jwtDecode<JwtPayload>(token);
-
-      // Check if the decoded token has an 'exp' (expiration) property and if it is less than the current time in seconds.
       if (decoded?.exp && decoded?.exp < Date.now() / 1000) {
-        // If the token is expired, return true indicating that it is expired.
         return true;
       }
     } catch (err) {
-      // If decoding fails (e.g., due to an invalid token format), catch the error and return false.
       return false;
     }
   }
@@ -37,12 +36,34 @@ class AuthService {
 
   login(idToken: string) {
     localStorage.setItem('id_token', idToken);
+    this.resetInactivityTimer();
     window.location.assign('/');
   }
 
   logout() {
     localStorage.removeItem('id_token');
+    if (this.inactivityTimer) {
+      clearTimeout(this.inactivityTimer); 
+    }
     window.location.assign('/');
+  }
+  
+  resetInactivityTimer() {
+    if (this.inactivityTimer) {
+      clearTimeout(this.inactivityTimer);
+    }
+    this.inactivityTimer = setTimeout(() => this.handleSessionTimeout(), this.inactivityTimeout);
+  }
+  
+  handleSessionTimeout() {
+    this.logout();
+  }
+
+  setupInactivityListener() {
+    const events = ['mousemove', 'keydown', 'scroll', 'click'];
+    events.forEach(event => {
+      window.addEventListener(event, () => this.resetInactivityTimer());
+    });
   }
 }
 
