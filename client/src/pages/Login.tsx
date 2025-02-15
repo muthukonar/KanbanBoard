@@ -10,6 +10,7 @@ const Login = () => {
     password: ''
   });
   console.log(loginData);
+  const [error, setError] = useState<string>('');
 
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -21,12 +22,14 @@ const Login = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setError('');
     try {
       const data = await login(loginData);
       Auth.login(data.token);
       console.log(data.token);
     } catch (err) {
       console.error('Failed to login', err);
+      setError('Invalid username/password');
     }
   };
 
@@ -49,6 +52,8 @@ const Login = () => {
           onChange={handleChange}
         />
         <button type='submit'>Submit Form</button>
+
+        {error && <p className="error">{error}</p>}
       </form>
     </div>
     
