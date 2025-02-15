@@ -246,3 +246,9 @@ tbody tr:nth-child(odd) {
         overflow: hidden;
     }
 }
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}
