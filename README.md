@@ -34,7 +34,7 @@ Once Application is started with npm run start, open the application in browser 
 - Inspect the broser and check the token that is generated (as shown in screenshot).
 - Add or remove task in Kanban board based on your preferences
 
-Deployed link : - 
+Deployed link : - https://kanbanboard-s0kr.onrender.com/
 
 GitHub link :- https://github.com/muthukonar/KanbanBoard
 
