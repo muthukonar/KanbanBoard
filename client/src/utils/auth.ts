@@ -3,7 +3,7 @@ import type { UserData } from '../interfaces/UserData';
 
 class AuthService {
   private inactivityTimeout: number = 60 * 1000; 
-  private inactivityTimer: number | null = null;
+  private inactivityTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
     this.setupInactivityListener();
@@ -68,3 +68,4 @@ class AuthService {
 }
 
 export default new AuthService();
+
